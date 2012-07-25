@@ -1,0 +1,14 @@
+.gradle
+*.swp
+*.iml
+*.ipr
+*.iws
+.idea
+.svn
+.classpath
+.project
+.settings
+out
+bin
+build
+test-output
