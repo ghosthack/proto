@@ -6,13 +6,18 @@ import static org.testng.Assert.assertEquals;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
+import content.datastore.element.ElementDataStore;
+import content.datastore.template.TemplateDataStore;
+import content.datastore.view.ViewDataStore;
 import content.handlers.element.ElementCreate;
 import content.handlers.element.ElementModify;
 import org.apache.log4j.Logger;
@@ -23,17 +28,94 @@ import com.google.gson.Gson;
 
 public class TestApi {
 
-  public static void main(String args[]) throws Exception {
+  static {
     PropertyConfigurator.configure(TestApi.class.getResource("/logging.properties"));
+  }
+
+  public static void main(String args[]) throws Exception {
     TestApi test = new TestApi();
     test.all();
   }
 
   public void all() throws Exception {
-    log.debug("********* Test content check");
-    testContentCheck();
-    log.debug("********* Test create element");
-    testCreateElement();
+//    log.debug("********* Test content check");
+//    testContentCheck();
+//    log.debug("********* Test create element");
+//    testCreateElement();
+    log.debug("********* Test render element");
+    testRender1Element();
+  }
+
+  @Test
+  public void testRender1Element() throws Exception {
+    ServletContext context = mock(ServletContext.class);
+    DataSource dataSource = mock(DataSource.class);
+    Connection connection = mock(Connection.class);
+    PreparedStatement viewStatement = mock(PreparedStatement.class);
+    PreparedStatement templateStatement = mock(PreparedStatement.class);
+    PreparedStatement elementStatement = mock(PreparedStatement.class);
+    ResultSet viewSet = mock(ResultSet.class);
+    ResultSet templateSet = mock(ResultSet.class);
+    ResultSet elementSet = mock(ResultSet.class);
+    String id = "1";
+    String templateId = "2";
+    String template = "This is a test string: {value}";
+    String element = "{\"value\": \"Test\"}";
+
+    when(context.getAttribute("dataSource")).thenReturn(dataSource);
+    when(dataSource.getConnection()).thenReturn(connection);
+
+    when(connection.prepareStatement(ViewDataStore.SELECT)).thenReturn(viewStatement);
+    when(viewSet.next()).thenReturn(true);
+    when(viewSet.getString(1)).thenReturn(templateId);
+    when(viewStatement.executeQuery()).thenReturn(viewSet);
+
+    when(connection.prepareStatement(TemplateDataStore.SELECT)).thenReturn(templateStatement);
+    when(templateSet.next()).thenReturn(true);
+    when(templateSet.getString(1)).thenReturn(template);
+    when(templateStatement.executeQuery()).thenReturn(templateSet);
+
+    when(connection.prepareStatement(ElementDataStore.SELECT)).thenReturn(elementStatement);
+    when(elementSet.next()).thenReturn(true);
+    when(elementSet.getString(1)).thenReturn(element);
+    when(elementStatement.executeQuery()).thenReturn(elementSet);
+
+    HttpServletRequest req = mockReq("GET", "/render/" + id);
+    MockHttpServletResponse res = mockRes();
+
+    ContentHandler.create(context).service(req, res);
+    assertEquals(res.getStringWriter().toString(), "This is a test string: Test");
+    assertEquals(res.getStatus(), 200);
+  }
+
+  @Test
+  public void testRender1ElementNotFound() throws Exception {
+    ServletContext context = mock(ServletContext.class);
+    DataSource dataSource = mock(DataSource.class);
+    Connection connection = mock(Connection.class);
+    PreparedStatement statement1 = mock(PreparedStatement.class);
+    ResultSet set = mock(ResultSet.class);
+
+    when(set.next()).thenReturn(false);
+    when(statement1.executeQuery()).thenReturn(set);
+    when(dataSource.getConnection()).thenReturn(connection);
+    when(context.getAttribute("dataSource")).thenReturn(dataSource);
+    when(connection.prepareStatement(ViewDataStore.SELECT)).thenReturn(statement1);
+
+    int id = createId();
+
+    HttpServletRequest req = mockReq("GET", "/render/" + id);
+    MockHttpServletResponse res = mockRes();
+
+//    ElementCreate element = createSampleCreateElement(id);
+//    when(req.getReader()).thenReturn(new BufferedReader(new StringReader(new Gson().toJson(element))));
+
+    PreparedStatement insertStatement = mock(PreparedStatement.class);
+    when(insertStatement.executeUpdate()).thenReturn(1);
+    //when(selectStatement.executeQuery()).thenReturn(set);
+
+    ContentHandler.create(context).service(req, res);
+    assertEquals(res.getStatus(), 404);
   }
 
   @Test
