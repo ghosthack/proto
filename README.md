@@ -1,11 +1,24 @@
 Content API
 ===========
 
-A REST API for storage and retrieval of elements as JSON.
-Renders elements using json-template.
-Persistence is based on key-value data stores.
+A REST API for storage and retrieval of elements as JSON [1][2].
+
+Renders elements using json-template [3].
+
+Persistence is based on key-value data stores [4].
 
 Encoding is UTF-8.
+
+Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0
+
+
+[1] JSON: http://www.json.org/
+
+[2] Uses JSON.simple: http://code.google.com/p/json-simple/
+
+[3] JSON Template; http://code.google.com/p/json-template/
+
+[4] Sample data stores implemented as key-value tables in MySQL
 
 
 Render an element
@@ -84,6 +97,7 @@ Roadmap
  * JSONP
  * Auth & Auth
  * Caching
+ * Last-Modified, Expires
  * Schemas
  * Template validation
  * GAE Datastore Implementation
