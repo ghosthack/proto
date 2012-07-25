@@ -26,14 +26,14 @@ import org.testng.annotations.Test;
 
 import com.google.gson.Gson;
 
-public class TestApi {
+public class TestContentApi {
 
   static {
-    PropertyConfigurator.configure(TestApi.class.getResource("/logging.properties"));
+    PropertyConfigurator.configure(TestContentApi.class.getResource("/logging.properties"));
   }
 
   public static void main(String args[]) throws Exception {
-    TestApi test = new TestApi();
+    TestContentApi test = new TestContentApi();
     test.all();
   }
 
@@ -83,8 +83,13 @@ public class TestApi {
     HttpServletRequest req = mockReq("GET", "/render/" + id);
     MockHttpServletResponse res = mockRes();
 
+    String expected = "text/html";
+    when(req.getHeader("Accept")).thenReturn(expected);
+
     ContentHandler.create(context).service(req, res);
     assertEquals(res.getStringWriter().toString(), "This is a test string: Test");
+
+    assertEquals(res.getContentType(), expected);
     assertEquals(res.getStatus(), 200);
   }
 
@@ -200,6 +205,6 @@ public class TestApi {
     return element;
   }
 
-  private final Logger log = Logger.getLogger(TestApi.class);
+  private final Logger log = Logger.getLogger(TestContentApi.class);
 
 }
