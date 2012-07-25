@@ -1,6 +1,7 @@
 package content;
 
 import content.util.ActionHelper;
+import org.apache.log4j.Logger;
 import turismo.action.Action;
 import turismo.routes.RoutesList;
 import content.actions.render.*;
@@ -9,6 +10,7 @@ import content.actions.template.*;
 import content.actions.view.*;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 public class ContentApi extends RoutesList {
 
@@ -63,6 +65,13 @@ public class ContentApi extends RoutesList {
       "/view/:id",
       viewDeleteAction);
     get(
+      "/init", new ContentAction() {
+      @Override
+      public void run() {
+        getManager().init();
+      }
+    });
+    get(
       "/check", new Action() {
       @Override
       public void run() {
@@ -85,6 +94,7 @@ public class ContentApi extends RoutesList {
         }
       }
     });
+    log.info("Mapped content api routes.");
   }
 
   public ContentApi(ContentManager manager) {
@@ -129,5 +139,7 @@ public class ContentApi extends RoutesList {
   private final Render1Action render1Action = ActionHelper.createAction(Render1Action.class, this);
 
   private final Render2Action render2Action = ActionHelper.createAction(Render2Action.class, this);
+
+  private final Logger log = Logger.getLogger(ContentApi.class);
 
 }

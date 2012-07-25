@@ -15,7 +15,7 @@ public class H2Test {
   public static final String JDBC_URL = "jdbc:h2:~/test";
 
   public static void main(String[] arg) throws Exception {
-    PropertyConfigurator.configure(TestApi.class.getResource("/logging.properties"));
+    PropertyConfigurator.configure(TestContentApi.class.getResource("/logging.properties"));
     H2Test test = new H2Test();
     test.testH2();
   }

@@ -1,5 +1,6 @@
 package content;
 
+import content.datastore.InitDataStore;
 import content.handlers.ResultHandler;
 import content.datastore.element.ElementDataStore;
 import content.datastore.template.TemplateDataStore;
@@ -116,6 +117,16 @@ public class ContentManager {
     });
   }
 
+  public void init() {
+    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+      protected void doInTransactionWithoutResult(TransactionStatus status) {
+        initDataStore.element();
+        initDataStore.template();
+        initDataStore.view();
+      }
+    });
+  }
+
   public ContentManager(DataSource dataSource) {
     DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager(dataSource);
     transactionTemplate = new TransactionTemplate(dataSourceTransactionManager);
@@ -123,6 +134,7 @@ public class ContentManager {
     elementDataStore = new ElementDataStore(jdbcTemplate);
     templateDataStore = new TemplateDataStore(jdbcTemplate);
     viewDataStore = new ViewDataStore(jdbcTemplate);
+    initDataStore = new InitDataStore(jdbcTemplate);
   }
 
   private ElementDataStore elementDataStore;
@@ -130,6 +142,8 @@ public class ContentManager {
   private TemplateDataStore templateDataStore;
 
   private ViewDataStore viewDataStore;
+
+  private final InitDataStore initDataStore;
 
   private TransactionTemplate transactionTemplate;
 
