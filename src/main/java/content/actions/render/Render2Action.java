@@ -10,7 +10,7 @@ public class Render2Action extends View1Action {
   @Override
   public void run(String elementId, final String templateId) {
     log.debug("Render 2 element action");
-    renderComponent.render(res(), elementId, templateId);
+    renderComponent.render(req(), res(), elementId, templateId);
   }
 
   private static final Logger log = Logger.getLogger(Render2Action.class);

@@ -20,7 +20,8 @@ public class Render1Action extends BaseAction {
       getManager().readView(id, new ResultHandler<ViewRead>() {
         @Override
         public void success(ViewRead view) {
-          renderComponent.render(res(), id, view.getValue());
+          log.debug("View found: " + view.getValue());
+          renderComponent.render(req(), res(), id, view.getValue());
         }
 
         @Override

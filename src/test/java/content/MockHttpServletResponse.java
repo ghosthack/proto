@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 public class MockHttpServletResponse extends HttpServletResponseWrapper {
 
   private int status;
-  StringWriter writer = new StringWriter();
+  private StringWriter writer = new StringWriter();
 
   public MockHttpServletResponse(HttpServletResponse response) {
     super(response);
@@ -21,6 +21,17 @@ public class MockHttpServletResponse extends HttpServletResponseWrapper {
   public StringWriter getStringWriter() {
     return writer;
   }
+
+  public String getContentType() {
+    return contentType;
+  }
+
+  public void setContentType(String contentType) {
+    this.contentType = contentType;
+  }
+
+  private String contentType;
+
 
   @Override
   public PrintWriter getWriter() throws IOException {
