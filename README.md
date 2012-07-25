@@ -47,7 +47,6 @@ Create an element
 -----------------
 
     POST /content/element/:id
-
     Content: JSON
 
 
@@ -55,7 +54,6 @@ Create a template
 -----------------
 
     POST /content/template/:id
-
     Content: json-template
 
 
@@ -73,9 +71,7 @@ Element operations
 ------------------
 
     PUT     /content/element/:id
-
     DELETE  /content/element/:id
-
     GET     /content/element/:id
 
 
@@ -83,9 +79,7 @@ Template operations
 -------------------
 
     PUT     /content/template/:id
-
     DELETE  /content/template/:id
-
     GET     /content/template/:id
 
 
@@ -96,10 +90,10 @@ Roadmap
  * Auth & Auth
  * Caching
  * Last-Modified, Expires
- * Schemas
- * Template validation
  * GAE Datastore Implementation
- * Coverage
+ * Template validation
  * UTF-8 validation
  * Better JSON valitation handling
+ * Schemas
+ * 100% Coverage
 
