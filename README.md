@@ -1,4 +1,3 @@
-
 Content API
 ===========
 
@@ -7,6 +6,30 @@ Renders elements using json-template.
 Persistence is based on key-value data stores.
 
 Encoding is UTF-8.
+
+
+Render an element
+-----------------
+
+Using an element's default template:
+
+    GET /content/render/:element
+
+Or using a specific template:
+
+    GET /content/render/:element/:template
+
+Content-Type is based on "Accept" header:
+
+    Accept: text/html => Content-Type: text/html
+    Accept: application/json => Content-Type: application/json
+    ...
+
+Possible exceptions:
+
+    404 Not found
+    400 Bad request
+    500 Internal server error
 
 
 Create an element
@@ -33,26 +56,6 @@ Configure a default template for an element
 Update:
 
     PUT /content/view/:element/:template
-
-
-Render an element
------------------
-
-    GET /content/render/:element
-
-    GET /content/render/:element/:template
-
-Content-Type is based on "Accept" header:
-
-    Accept: text/html => Content-Type: text/html
-    Accept: application/json => Content-Type: application/json
-    ...
-
-Possible exceptions:
-
-    404 Not found
-    400 Bad request
-    500 Internal server error
 
 
 Element operations
