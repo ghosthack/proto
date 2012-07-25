@@ -1,15 +1,13 @@
 Content API
 ===========
 
-A REST API for storage and retrieval of elements as JSON [1][2].
+An abstract content manager, which features:
 
-Renders elements using json-template [3].
-
-Persistence is based on key-value data stores [4].
-
-Encoding is UTF-8.
-
-Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0
+ - REST API for storage and retrieval of elements as JSON [1][2].
+ - Renders elements using json-template [3].
+ - Persistence is based on key-value data stores [4].
+ - Encoding is UTF-8.
+ - Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0
 
 
 [1] JSON: http://www.json.org/
