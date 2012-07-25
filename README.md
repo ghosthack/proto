@@ -12,67 +12,67 @@ Encoding is UTF-8.
 Create an element
 -----------------
 
-  POST /content/element/:id
+    POST /content/element/:id
 
-  Content: JSON
+    Content: JSON
 
 
 Create a template
 -----------------
 
-  POST /content/template/:id
+    POST /content/template/:id
 
-  Content: json-template
+    Content: json-template
 
 
 Configure a default template for an element
 -------------------------------------------
 
-  POST /content/view/:element/:template
+    POST /content/view/:element/:template
 
 Update:
 
-  PUT /content/view/:element/:template
+    PUT /content/view/:element/:template
 
 
 Render an element
 -----------------
 
-  GET /content/render/:element
+    GET /content/render/:element
 
-  GET /content/render/:element/:template
+    GET /content/render/:element/:template
 
 Content-Type is based on "Accept" header:
 
-  Accept: text/html => Content-Type: text/html
-  Accept: application/json => Content-Type: application/json
-  ...
+    Accept: text/html => Content-Type: text/html
+    Accept: application/json => Content-Type: application/json
+    ...
 
 Possible exceptions:
 
-  404 Not found
-  400 Bad request
-  500 Internal server error
+    404 Not found
+    400 Bad request
+    500 Internal server error
 
 
 Element operations
 ------------------
 
-  PUT    /content/element/:id
+    PUT     /content/element/:id
 
-  DELETE /content/element/:id
+    DELETE  /content/element/:id
 
-  GET    /content/element/:id
+    GET     /content/element/:id
 
 
 Template operations
 -------------------
 
-  PUT    /content/template/:id
+    PUT     /content/template/:id
 
-  DELETE /content/template/:id
+    DELETE  /content/template/:id
 
-  GET    /content/template/:id
+    GET     /content/template/:id
 
 
 Roadmap
