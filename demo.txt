@@ -1,0 +1,27 @@
+# proto demo script
+
+# check status:
+http://localhost:8080/proto/content/check
+
+# create a test template:
+curl -v -X POST --data "This is a test: {name}" "http://localhost:8080/proto/content/template/2"
+
+# create a test element:
+curl -v -X POST --data "{\"name\": \"Test\"}" "http://localhost:8080/proto/content/element/2"
+
+
+# update a test template:
+curl -v -X PUT --data "This is a test: {name}" "http://localhost:8080/proto/content/template/2"
+
+# update a test element:
+curl -v -X PUT --data "{\"name\": \"Test\"}" "http://localhost:8080/proto/content/element/2"
+
+
+# render an element:
+curl -v -X GET "http://localhost:8080/proto/content/render/2/2"
+
+
+# link a view:
+curl -v -X PUT "http://localhost:8080/proto/content/view/2/2"
+
+
