@@ -1,5 +1,6 @@
 package content;
 
+import content.actions.InitAction;
 import content.util.ActionHelper;
 import org.apache.log4j.Logger;
 import turismo.action.Action;
@@ -65,12 +66,8 @@ public class ContentApi extends RoutesList {
       "/view/:id",
       viewDeleteAction);
     get(
-      "/init", new ContentAction() {
-      @Override
-      public void run() {
-        getManager().init();
-      }
-    });
+      "/init",
+      initAction);
     get(
       "/check", new Action() {
       @Override
@@ -139,6 +136,8 @@ public class ContentApi extends RoutesList {
   private final Render1Action render1Action = ActionHelper.createAction(Render1Action.class, this);
 
   private final Render2Action render2Action = ActionHelper.createAction(Render2Action.class, this);
+
+  private final InitAction initAction = ActionHelper.createAction(InitAction.class, this);
 
   private final Logger log = Logger.getLogger(ContentApi.class);
 
