@@ -92,6 +92,7 @@ Roadmap
  * Last-Modified, Expires
  * GAE Datastore Implementation
  * Template validation
+ * Sets
  * UTF-8 validation
  * Better JSON valitation handling
  * Schemas
