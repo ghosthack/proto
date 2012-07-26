@@ -12,3 +12,4 @@ out
 bin
 build
 test-output
+.DS_Store
