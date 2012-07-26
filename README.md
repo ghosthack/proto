@@ -16,7 +16,7 @@ An abstract content manager, which features:
 
 [3] JSON Template; http://code.google.com/p/json-template/
 
-[4] Sample data stores implemented as key-value tables in MySQL
+[4] Default data stores implemented as key-value tables in H2, MySQL
 
 
 Render an element
