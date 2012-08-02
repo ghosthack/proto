@@ -14,7 +14,7 @@ public class ViewUpdateAction extends BaseAction {
   public void run(String id) {
     log.debug("Modify view action");
     ViewUpdate element = new ViewUpdate();
-    element.setValue(RequestHelper.read(req()));
+    element.setValue(RequestHelper.readString(req()));
     if (Preconditions.isNullOrEmpty(id)) {
       log.debug("Id is not valid, 'Bad Request'");
       res().setStatus(400);

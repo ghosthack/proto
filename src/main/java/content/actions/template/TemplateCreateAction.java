@@ -13,7 +13,7 @@ public class TemplateCreateAction extends BaseAction {
   public void run(String id) {
     log.debug("Create template action");
     TemplateCreate element = new TemplateCreate();
-    element.setValue(RequestHelper.read(req()));
+    element.setValue(RequestHelper.readString(req()));
     if (Preconditions.isNullOrEmpty(id)) {
       log.debug("Id is not valid, 'Bad Request'");
       res().setStatus(400);

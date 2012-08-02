@@ -3,6 +3,7 @@ package content.actions.element;
 import content.actions.BaseAction;
 import content.handlers.ResultHandler;
 import content.handlers.element.ElementRead;
+import content.util.CharsetConstant;
 import content.util.Preconditions;
 import content.util.ResponseHelper;
 import org.apache.log4j.Logger;
@@ -20,7 +21,10 @@ public class ElementReadAction extends BaseAction {
         @Override
         public void success(ElementRead element) {
           res().setStatus(200);
-          ResponseHelper.write(res(), element.getValue());
+          res().setCharacterEncoding(CharsetConstant.UTF_8);
+          String value = element.getValue();
+          log.debug("Value: " + value);
+          ResponseHelper.write(res(), value);
         }
 
         @Override

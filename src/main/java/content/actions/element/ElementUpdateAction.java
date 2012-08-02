@@ -3,9 +3,14 @@ package content.actions.element;
 import content.actions.BaseAction;
 import content.handlers.element.ElementModify;
 import content.handlers.element.ElementModifyHandler;
+import content.util.CharsetConstant;
+import content.util.Dumper;
 import content.util.RequestHelper;
 import content.util.Preconditions;
 import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.io.FileInputStream;
 
 public class ElementUpdateAction extends BaseAction {
 
@@ -13,9 +18,12 @@ public class ElementUpdateAction extends BaseAction {
   public void run(String id) {
     log.debug("Modify element action");
     ElementModify element = new ElementModify();
-    element.setValue(RequestHelper.readJson(req()).toString());
+    element.setValue(RequestHelper.readString(req()));
     if (Preconditions.isNullOrEmpty(id)) {
       log.debug("Id is not valid, 'Bad Request'");
+      res().setStatus(400);
+    } else if (Preconditions.isNullOrEmpty(element.getValue())) {
+      log.debug("Value is not valid, 'Bad Request'");
       res().setStatus(400);
     } else {
       getManager().updateElement(id, element, new ElementModifyHandler() {

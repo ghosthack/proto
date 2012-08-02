@@ -13,7 +13,7 @@ public class ElementCreateAction extends BaseAction {
   public void run(String id) {
     log.debug("Create element action");
     ElementCreate element = new ElementCreate();
-    element.setValue(RequestHelper.readJson(req()).toString());
+    element.setValue(RequestHelper.readString(req()));
     if (Preconditions.isNullOrEmpty(id)) {
       log.debug("Id is not valid, 'Bad Request'");
       res().setStatus(400);

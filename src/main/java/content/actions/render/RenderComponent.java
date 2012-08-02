@@ -5,6 +5,7 @@ import content.ContentManager;
 import content.handlers.ResultHandler;
 import content.handlers.element.ElementRead;
 import content.handlers.template.TemplateRead;
+import content.util.CharsetConstant;
 import content.util.Preconditions;
 import content.util.ResponseHelper;
 import content.util.TemplateHelper;
@@ -35,6 +36,7 @@ public class RenderComponent {
             public void success(TemplateRead template) {
               log.debug("Template found: " + template.getValue());
               res.setStatus(200);
+              res.setCharacterEncoding(CharsetConstant.UTF_8);
               String accept = req.getHeader(ACCEPT);
               log.debug("Accept: " + accept);
               if (!Preconditions.isNullOrEmpty(accept)) {

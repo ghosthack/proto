@@ -14,7 +14,7 @@ public class TemplateUpdateAction extends BaseAction {
   public void run(String id) {
     log.debug("Modify template action");
     TemplateUpdate element = new TemplateUpdate();
-    element.setValue(RequestHelper.read(req()));
+    element.setValue(RequestHelper.readString(req()));
     if (Preconditions.isNullOrEmpty(id)) {
       log.debug("Id is not valid, 'Bad Request'");
       res().setStatus(400);

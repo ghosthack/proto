@@ -3,9 +3,12 @@ package content.actions.template;
 import content.actions.BaseAction;
 import content.handlers.ResultHandler;
 import content.handlers.template.TemplateRead;
+import content.util.CharsetConstant;
 import content.util.Preconditions;
 import content.util.ResponseHelper;
 import org.apache.log4j.Logger;
+
+import java.nio.charset.Charset;
 
 public class TemplateReadAction extends BaseAction {
 
@@ -20,6 +23,7 @@ public class TemplateReadAction extends BaseAction {
         @Override
         public void success(TemplateRead element) {
           res().setStatus(200);
+          res().setCharacterEncoding(CharsetConstant.UTF_8);
           ResponseHelper.write(res(), element.getValue());
         }
 
