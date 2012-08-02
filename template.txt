@@ -1,0 +1,16 @@
+<html>
+<head>
+<title>Demo template</title>
+</head>
+<body>
+<p>
+Demo: {{demo}}
+</p>
+<p>
+&amp;atilde;: á
+</p>
+<p>
+&amp;atilde;: {{tilde}}
+</p>
+</body>
+</html>

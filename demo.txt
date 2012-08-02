@@ -16,6 +16,17 @@ curl -v -X PUT --data "This is a test: {name}" "http://localhost:8080/proto/cont
 # update a test element:
 curl -v -X PUT --data "{\"name\": \"Test\"}" "http://localhost:8080/proto/content/element/2"
 
+# update a test element:
+curl -v -X PUT --data "{\"name\": \"Test\"}" "http://localhost:8080/proto/content/element/2"
+
+# create a demo element from file:
+curl -v -X PUT -T element.txt "http://localhost:8080/proto-cms-v0/content/element/2"
+curl -v -X GET "http://localhost:8080/proto-cms-v0/content/element/2"
+
+# create a demo template from file:
+curl -v -X PUT -T template.txt "http://localhost:8080/proto-cms-v0/content/template/2"
+curl -v -X GET "http://localhost:8080/proto-cms-v0/content/template/2"
+
 
 # render an element:
 curl -v -X GET "http://localhost:8080/proto/content/render/2/2"
