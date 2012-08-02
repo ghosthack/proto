@@ -4,8 +4,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,6 +18,7 @@ import content.datastore.template.TemplateDataStore;
 import content.datastore.view.ViewDataStore;
 import content.handlers.element.ElementCreate;
 import content.handlers.element.ElementModify;
+import content.util.CharsetConstant;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.testng.annotations.Test;
@@ -40,10 +39,12 @@ public class TestContentApi {
   public void all() throws Exception {
 //    log.debug("********* Test content check");
 //    testContentCheck();
-//    log.debug("********* Test create element");
-//    testCreateElement();
-    log.debug("********* Test render element");
-    testRender1Element();
+    log.debug("********* Test create element");
+    testCreateElement();
+    log.debug("********* Test create element ISO");
+    testCreateElementIso();
+//    log.debug("********* Test render element");
+//    testRender1Element();
   }
 
   @Test
@@ -135,7 +136,7 @@ public class TestContentApi {
     assertEquals(res.getStringWriter().toString(), "GOOD");
   }
 
-@Test
+  @Test
   public void testCreateElement() throws Exception {
     ServletContext context = mock(ServletContext.class);
     when(context.getAttribute("dataSource")).thenReturn(ContentDataSource.createDataSource());
@@ -145,7 +146,40 @@ public class TestContentApi {
     MockHttpServletResponse res = mockRes();
 
     ElementCreate element = createSampleCreateElement(id);
-    when(req.getReader()).thenReturn(new BufferedReader(new StringReader(new Gson().toJson(element))));
+    element.setValue("á");
+    String json = new Gson().toJson(element);
+    byte[] jsonBytes = json.getBytes(CharsetConstant.UTF_8);
+    when(req.getContentLength()).thenReturn(jsonBytes.length);
+    when(req.getInputStream()).thenReturn(new MockServletInputStream(jsonBytes));
+
+    PreparedStatement insertStatement = mock(PreparedStatement.class);
+    when(insertStatement.executeUpdate()).thenReturn(1);
+    PreparedStatement selectStatement = mock(PreparedStatement.class);
+    ResultSet set = mock(ResultSet.class);
+    when(set.next()).thenReturn(false);
+    when(selectStatement.executeQuery()).thenReturn(set);
+
+    ContentHandler.create(context).service(req, res);
+    assertEquals(res.getStatus(), 201);
+  }
+
+  @Test
+  public void testCreateElementIso() throws Exception {
+    ServletContext context = mock(ServletContext.class);
+    when(context.getAttribute("dataSource")).thenReturn(ContentDataSource.createDataSource());
+    int id = createId();
+
+    HttpServletRequest req = mockReq("POST", "/element/" + id);
+    MockHttpServletResponse res = mockRes();
+
+    ElementCreate element = createSampleCreateElement(id);
+    element.setValue("á");
+    String json = new Gson().toJson(element);
+    String encoding = "ISO-8859-1";
+    byte[] jsonBytes = json.getBytes(encoding);
+    when(req.getCharacterEncoding()).thenReturn(encoding);
+    when(req.getContentLength()).thenReturn(jsonBytes.length);
+    when(req.getInputStream()).thenReturn(new MockServletInputStream(jsonBytes));
 
     PreparedStatement insertStatement = mock(PreparedStatement.class);
     when(insertStatement.executeUpdate()).thenReturn(1);
