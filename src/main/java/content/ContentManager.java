@@ -1,12 +1,13 @@
 package content;
 
 import content.datastore.InitDataStore;
-import content.handlers.ResultHandler;
 import content.datastore.element.ElementDataStore;
 import content.datastore.template.TemplateDataStore;
 import content.datastore.template.TemplateUpdate;
 import content.datastore.view.ViewDataStore;
 import content.datastore.view.ViewUpdate;
+import content.handlers.ResultHandler;
+import content.handlers.ResultHandlerEx;
 import content.handlers.element.*;
 import content.handlers.template.*;
 import content.handlers.view.*;
@@ -18,13 +19,31 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 
 public class ContentManager {
+
+  public void streamCreateElement(final String id, final InputStream stream, final ElementCreateHandler handler) {
+    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+      protected void doInTransactionWithoutResult(TransactionStatus status) {
+        elementDataStore.create(id, stream, handler);
+      }
+    });
+  }
 
   public void createElement(final String id, final ElementCreate element, final ElementCreateHandler handler) {
     transactionTemplate.execute(new TransactionCallbackWithoutResult() {
       protected void doInTransactionWithoutResult(TransactionStatus status) {
         elementDataStore.create(id, element, handler);
+      }
+    });
+  }
+
+  public void streamUpdateElement(final String id, final InputStream stream, final ElementModifyHandler handler) {
+    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+      protected void doInTransactionWithoutResult(TransactionStatus status) {
+        elementDataStore.update(id, stream, handler);
       }
     });
   }
@@ -38,6 +57,14 @@ public class ContentManager {
   }
 
   public void readElement(final String id, final ResultHandler<ElementRead> handler) {
+    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+      protected void doInTransactionWithoutResult(TransactionStatus status) {
+        elementDataStore.read(id, handler);
+      }
+    });
+  }
+
+  public void readElement(final String id, final ResultHandlerEx<BufferedInputStream> handler) {
     transactionTemplate.execute(new TransactionCallbackWithoutResult() {
       protected void doInTransactionWithoutResult(TransactionStatus status) {
         elementDataStore.read(id, handler);

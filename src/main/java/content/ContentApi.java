@@ -1,17 +1,20 @@
 package content;
 
 import content.actions.InitAction;
+import content.actions.element.*;
+import content.actions.render.Render1Action;
+import content.actions.render.Render2Action;
+import content.actions.template.TemplateCreateAction;
+import content.actions.template.TemplateDeleteAction;
+import content.actions.template.TemplateReadAction;
+import content.actions.template.TemplateUpdateAction;
+import content.actions.view.*;
 import content.util.ActionHelper;
 import org.apache.log4j.Logger;
 import turismo.action.Action;
 import turismo.routes.RoutesList;
-import content.actions.render.*;
-import content.actions.element.*;
-import content.actions.template.*;
-import content.actions.view.*;
 
 import java.io.IOException;
-import java.util.Enumeration;
 
 public class ContentApi extends RoutesList {
 
@@ -24,11 +27,20 @@ public class ContentApi extends RoutesList {
       "/render/:element/:template",
       render2Action);
     post(
+      "/element/:id/stream",
+      streamCreateAction);
+    post(
       "/element/:id",
       elementCreateAction);
     get(
+      "/element/:id/stream",
+      streamReadAction);
+    get(
       "/element/:id",
       elementReadAction);
+    put(
+      "/element/:id/stream",
+      streamUpdateAction);
     put(
       "/element/:id",
       elementUpdateAction);
@@ -105,9 +117,15 @@ public class ContentApi extends RoutesList {
 
   private final ContentManager manager;
 
+  private final StreamCreateAction streamCreateAction = ActionHelper.createAction(StreamCreateAction.class, this);
+
   private final ElementCreateAction elementCreateAction = ActionHelper.createAction(ElementCreateAction.class, this);
 
+  private final StreamReadAction streamReadAction = ActionHelper.createAction(StreamReadAction.class, this);
+
   private final ElementReadAction elementReadAction = ActionHelper.createAction(ElementReadAction.class, this);
+
+  private final StreamUpdateAction streamUpdateAction = ActionHelper.createAction(StreamUpdateAction.class, this);
 
   private final ElementUpdateAction elementUpdateAction = ActionHelper.createAction(ElementUpdateAction.class, this);
 

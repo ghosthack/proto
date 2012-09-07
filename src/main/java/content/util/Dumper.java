@@ -1,7 +1,9 @@
 package content.util;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 public class Dumper {
 
@@ -17,4 +19,10 @@ public class Dumper {
     return new String(os, charSet);
   }
 
+  public static void transfer(BufferedInputStream stream, OutputStream os) throws IOException {
+    int next;
+    while((next = stream.read()) != -1) {
+      os.write(next);
+    }
+  }
 }
