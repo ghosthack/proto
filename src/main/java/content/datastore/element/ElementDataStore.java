@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.support.lob.DefaultLobHandler;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -172,7 +171,6 @@ public class ElementDataStore {
 
   public ElementDataStore(JdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
-    lobHandler = new DefaultLobHandler();
   }
 
   public static final String INSERT = "INSERT INTO `ELEMENT` (`VALUE`, `KEY`) VALUES (?, ?)";
