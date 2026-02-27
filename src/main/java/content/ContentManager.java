@@ -1,179 +1,129 @@
 package content;
 
-import content.datastore.InitDataStore;
-import content.datastore.element.ElementDataStore;
-import content.datastore.template.TemplateDataStore;
-import content.datastore.template.TemplateUpdate;
-import content.datastore.view.ViewDataStore;
-import content.datastore.view.ViewUpdate;
-import content.handlers.ResultHandler;
-import content.handlers.ResultHandlerEx;
-import content.handlers.element.*;
-import content.handlers.template.*;
-import content.handlers.view.*;
-import org.apache.log4j.Logger;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
+import content.model.Result;
+import content.store.KeyValueStore;
+import content.store.Schema;
+import content.template.Template;
+import content.util.Json;
 
-import javax.sql.DataSource;
-import java.io.BufferedInputStream;
-import java.io.InputStream;
+/**
+ * Service layer that orchestrates store operations and template rendering.
+ */
+public final class ContentManager {
 
-public class ContentManager {
+    private final KeyValueStore elements;
+    private final KeyValueStore templates;
+    private final KeyValueStore views;
+    private final Schema schema;
 
-  public void streamCreateElement(final String id, final InputStream stream, final ElementCreateHandler handler) {
-    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-      protected void doInTransactionWithoutResult(TransactionStatus status) {
-        elementDataStore.create(id, stream, handler);
-      }
-    });
-  }
+    public ContentManager(KeyValueStore elements, KeyValueStore templates,
+                          KeyValueStore views, Schema schema) {
+        this.elements = elements;
+        this.templates = templates;
+        this.views = views;
+        this.schema = schema;
+    }
 
-  public void createElement(final String id, final ElementCreate element, final ElementCreateHandler handler) {
-    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-      protected void doInTransactionWithoutResult(TransactionStatus status) {
-        elementDataStore.create(id, element, handler);
-      }
-    });
-  }
+    // -- Schema ----------------------------------------------------------------
 
-  public void streamUpdateElement(final String id, final InputStream stream, final ElementModifyHandler handler) {
-    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-      protected void doInTransactionWithoutResult(TransactionStatus status) {
-        elementDataStore.update(id, stream, handler);
-      }
-    });
-  }
+    public void init() {
+        schema.initialize();
+    }
 
-  public void updateElement(final String id, final ElementModify element, final ElementModifyHandler handler) {
-    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-      protected void doInTransactionWithoutResult(TransactionStatus status) {
-        elementDataStore.update(id, element, handler);
-      }
-    });
-  }
+    // -- Element CRUD ----------------------------------------------------------
 
-  public void readElement(final String id, final ResultHandler<ElementRead> handler) {
-    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-      protected void doInTransactionWithoutResult(TransactionStatus status) {
-        elementDataStore.read(id, handler);
-      }
-    });
-  }
+    public Result<String> createElement(String key, String value) {
+        return elements.create(key, value);
+    }
 
-  public void readElement(final String id, final ResultHandlerEx<BufferedInputStream> handler) {
-    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-      protected void doInTransactionWithoutResult(TransactionStatus status) {
-        elementDataStore.read(id, handler);
-      }
-    });
-  }
+    public Result<String> readElement(String key) {
+        return elements.read(key);
+    }
 
-  public void deleteElement(final String id, final ElementDeleteHandler handler) {
-    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-      protected void doInTransactionWithoutResult(TransactionStatus status) {
-        elementDataStore.delete(id, handler);
-      }
-    });
-  }
+    public Result<String> updateElement(String key, String value) {
+        return elements.update(key, value);
+    }
 
-  public void createTemplate(final String id, final TemplateCreate element, final TemplateCreateHandler handler) {
-    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-      protected void doInTransactionWithoutResult(TransactionStatus status) {
-        templateDataStore.create(id, element, handler);
-      }
-    });
-  }
+    public Result<Void> deleteElement(String key) {
+        return elements.delete(key);
+    }
 
-  public void updateTemplate(final String id, final TemplateUpdate element, final TemplateModifyHandler handler) {
-    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-      protected void doInTransactionWithoutResult(TransactionStatus status) {
-        templateDataStore.update(id, element, handler);
-      }
-    });
-  }
+    // -- Template CRUD ---------------------------------------------------------
 
-  public void readTemplate(final String id, final ResultHandler<TemplateRead> resultTemplateHandler) {
-    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-      protected void doInTransactionWithoutResult(TransactionStatus status) {
-        templateDataStore.read(id, resultTemplateHandler);
-      }
-    });
-  }
+    public Result<String> createTemplate(String key, String value) {
+        return templates.create(key, value);
+    }
 
-  public void deleteTemplate(final String id, final TemplateDeleteHandler handler) {
-    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-      protected void doInTransactionWithoutResult(TransactionStatus status) {
-        templateDataStore.delete(id, handler);
-      }
-    });
-  }
+    public Result<String> readTemplate(String key) {
+        return templates.read(key);
+    }
 
-  public void createView(final String id, final ViewCreate element, final ViewCreateHandler handler) {
-    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-      protected void doInTransactionWithoutResult(TransactionStatus status) {
-        viewDataStore.create(id, element, handler);
-      }
-    });
-  }
+    public Result<String> updateTemplate(String key, String value) {
+        return templates.update(key, value);
+    }
 
-  public void updateView(final String id, final ViewUpdate element, final ViewModifyHandler handler) {
-    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-      protected void doInTransactionWithoutResult(TransactionStatus status) {
-        viewDataStore.update(id, element, handler);
-      }
-    });
-  }
+    public Result<Void> deleteTemplate(String key) {
+        return templates.delete(key);
+    }
 
-  public void readView(final String id, final ResultHandler<ViewRead> handler) {
-    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-      protected void doInTransactionWithoutResult(TransactionStatus status) {
-        viewDataStore.read(id, handler);
-      }
-    });
-  }
+    // -- View CRUD -------------------------------------------------------------
 
-  public void deleteView(final String id, final ViewDeleteHandler handler) {
-    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-      protected void doInTransactionWithoutResult(TransactionStatus status) {
-        viewDataStore.delete(id, handler);
-      }
-    });
-  }
+    public Result<String> createView(String key, String value) {
+        return views.create(key, value);
+    }
 
-  public void init() {
-    transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-      protected void doInTransactionWithoutResult(TransactionStatus status) {
-        initDataStore.element();
-        initDataStore.template();
-        initDataStore.view();
-      }
-    });
-  }
+    public Result<String> readView(String key) {
+        return views.read(key);
+    }
 
-  public ContentManager(DataSource dataSource) {
-    DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager(dataSource);
-    transactionTemplate = new TransactionTemplate(dataSourceTransactionManager);
-    JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-    elementDataStore = new ElementDataStore(jdbcTemplate);
-    templateDataStore = new TemplateDataStore(jdbcTemplate);
-    viewDataStore = new ViewDataStore(jdbcTemplate);
-    initDataStore = new InitDataStore(jdbcTemplate);
-  }
+    public Result<String> updateView(String key, String value) {
+        return views.update(key, value);
+    }
 
-  private ElementDataStore elementDataStore;
+    public Result<Void> deleteView(String key) {
+        return views.delete(key);
+    }
 
-  private TemplateDataStore templateDataStore;
+    // -- Rendering -------------------------------------------------------------
 
-  private ViewDataStore viewDataStore;
+    /**
+     * Render an element using the template specified by its view mapping.
+     */
+    public Result<String> renderByView(String elementId) {
+        var viewResult = views.read(elementId);
+        if (viewResult instanceof Result.Ok<String> view) {
+            return renderByPair(elementId, view.value());
+        }
+        return castResult(viewResult);
+    }
 
-  private final InitDataStore initDataStore;
+    /**
+     * Render an element with an explicit template.
+     */
+    public Result<String> renderByPair(String elementId, String templateId) {
+        var elemResult = elements.read(elementId);
+        if (!(elemResult instanceof Result.Ok<String> elem)) {
+            return castResult(elemResult);
+        }
 
-  private TransactionTemplate transactionTemplate;
+        var tmplResult = templates.read(templateId);
+        if (!(tmplResult instanceof Result.Ok<String> tmpl)) {
+            return castResult(tmplResult);
+        }
 
-  private static final Logger log = Logger.getLogger(ContentManager.class);
+        var data = Json.parse(elem.value());
+        var rendered = Template.compile(tmpl.value()).expand(data);
+        return Result.ok(rendered);
+    }
 
+    /** Type-safe cast for non-Ok results (NotFound, AlreadyExists, Error). */
+    @SuppressWarnings("unchecked")
+    private static <T, U> Result<U> castResult(Result<T> result) {
+        return switch (result) {
+            case Result.NotFound<?> nf -> Result.notFound();
+            case Result.AlreadyExists<?> ae -> Result.alreadyExists();
+            case Result.Error<?> err -> Result.error(err.message(), err.cause());
+            case Result.Ok<?> ok -> throw new IllegalStateException("Cannot cast Ok result");
+        };
+    }
 }

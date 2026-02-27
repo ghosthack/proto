@@ -1,15 +1,28 @@
+# Maven
+target/
+
+# Gradle (legacy)
 .gradle
-*.swp
+build
+
+# IDE
+.idea/
 *.iml
 *.ipr
 *.iws
-.idea
-.svn
 .classpath
 .project
 .settings
-out
-bin
-build
-test-output
+
+# OS
 .DS_Store
+*~
+*.swp
+
+# Test output
+test-output
+
+# H2 database files
+*.db
+*.trace.db
+*.lock.db
